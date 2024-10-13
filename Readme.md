@@ -1,30 +1,5 @@
 # Commander App
 
-A cross-platform command execution application.
-
-## Build Instructions
-
-```bash
-# Clone the repository
-git clone https://github.com/monomial/commander-app.git
-
-# Build the application
-cd commander-app
-go build -o commander-app
-
-## Testing
-
-Run the tests using:
-
-```bash
-go test ./...
-
-
-
-
-
-# Cross-Platform Command Execution Application
-
 This project is a basic cross-platform application that can execute simple system commands (like network ping and getting system info) and return results as JSON over an HTTP API.
 
 ## Table of Contents
