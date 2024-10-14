@@ -243,8 +243,6 @@ This test ensures that the `GetSystemInfo` method returns valid hostname and IP 
 
 Here’s a short clip demonstrating the app in action:
 
-![App Demo](media/commanderapp.mp4)
-
 [View the demo video](media/commanderapp.mp4)
 
 The clip shows:
