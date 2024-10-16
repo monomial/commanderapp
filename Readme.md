@@ -114,44 +114,6 @@ Executes a command and returns the result in JSON format.
 
 To install the application on macOS, follow these steps:
 
-1. **Run the installer script**:
-   ```bash
-   ./install.sh
-   ```
-
-   This script will build the app, copy the executable to `/usr/local/bin`, and set it to start on boot.
-
-2. **Verify Installation**:
-
-   Once installed, verify by running the app:
-
-   ```bash
-   commanderapp
-   ```
-
-   The app should start, and you can interact with it using the API.
-
-### Start on Boot (macOS)
-
-The `install.sh` script creates a `LaunchAgent` plist to automatically start the app on boot. If you need to manually control this, use:
-
-```bash
-launchctl load ~/Library/LaunchAgents/com.commanderapp.plist
-```
-
-
-
-
-Here’s how you can update the installation section of your `README.md` to reference the `.pkg` file instead of the script:
-
----
-
-## Installation Guide
-
-### macOS Installation
-
-To install the application on macOS, follow these steps:
-
 1. **Run the make-pkg.sh file**:
    
    Make the make-pkg.sh file executable and run it.
