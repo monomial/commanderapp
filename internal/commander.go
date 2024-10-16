@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"commander-app/internal/models"
 	"errors"
 	"net"
 	"os"
@@ -9,18 +10,8 @@ import (
 )
 
 type Commander interface {
-	Ping(host string) (PingResult, error)
-	GetSystemInfo() (SystemInfo, error)
-}
-
-type PingResult struct {
-	Successful bool          `json:"successful"`
-	Time       time.Duration `json:"time"`
-}
-
-type SystemInfo struct {
-	Hostname  string `json:"hostname"`
-	IPAddress string `json:"ip_address"`
+	Ping(host string) (models.PingResult, error)
+	GetSystemInfo() (models.SystemInfo, error)
 }
 
 type commander struct{}
@@ -29,25 +20,25 @@ func NewCommander() Commander {
 	return &commander{}
 }
 
-func (c *commander) Ping(host string) (PingResult, error) {
+func (c *commander) Ping(host string) (models.PingResult, error) {
 	start := time.Now()
 	err := exec.Command("ping", "-c", "1", host).Run()
 	if err != nil {
-		return PingResult{Successful: false}, err
+		return models.PingResult{Successful: false}, err
 	}
 	duration := time.Since(start)
-	return PingResult{Successful: true, Time: duration}, nil
+	return models.PingResult{Successful: true, Time: duration}, nil
 }
 
-func (c *commander) GetSystemInfo() (SystemInfo, error) {
+func (c *commander) GetSystemInfo() (models.SystemInfo, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
-		return SystemInfo{}, err
+		return models.SystemInfo{}, err
 	}
 
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
-		return SystemInfo{}, err
+		return models.SystemInfo{}, err
 	}
 
 	var ipAddr string
@@ -59,10 +50,10 @@ func (c *commander) GetSystemInfo() (SystemInfo, error) {
 	}
 
 	if ipAddr == "" {
-		return SystemInfo{}, errors.New("could not determine IP address")
+		return models.SystemInfo{}, errors.New("could not determine IP address")
 	}
 
-	return SystemInfo{
+	return models.SystemInfo{
 		Hostname:  hostname,
 		IPAddress: ipAddr,
 	}, nil
