@@ -1,20 +1,11 @@
 package internal
 
 import (
+	"commander-app/internal/models"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
-
-type CommandRequest struct {
-	Type    string `json:"type"`    // "ping" or "sysinfo"
-	Payload string `json:"payload"` // For ping, this is the host
-}
-
-type CommandResponse struct {
-	Success bool        `json:"success"`
-	Data    interface{} `json:"data"`
-	Error   string      `json:"error,omitempty"`
-}
 
 func HandleRequests(cmdr Commander) http.Handler {
 	mux := http.NewServeMux()
@@ -25,35 +16,35 @@ func HandleRequests(cmdr Commander) http.Handler {
 func handleCommand(cmdr Commander) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			http.Error(w, fmt.Sprintf("Method not allowed: %s", r.Method), http.StatusMethodNotAllowed)
 			return
 		}
 
-		var cmdReq CommandRequest
+		var cmdReq models.CommandRequest
 		decoder := json.NewDecoder(r.Body)
 		if err := decoder.Decode(&cmdReq); err != nil {
 			http.Error(w, "Bad request", http.StatusBadRequest)
 			return
 		}
 
-		var resp CommandResponse
+		var resp models.CommandResponse
 		switch cmdReq.Type {
 		case "ping":
 			result, err := cmdr.Ping(cmdReq.Payload)
 			if err != nil {
-				resp = CommandResponse{Success: false, Error: err.Error()}
+				resp = models.CommandResponse{Success: false, Error: err.Error()}
 			} else {
-				resp = CommandResponse{Success: true, Data: result}
+				resp = models.CommandResponse{Success: true, Data: result}
 			}
 		case "sysinfo":
 			result, err := cmdr.GetSystemInfo()
 			if err != nil {
-				resp = CommandResponse{Success: false, Error: err.Error()}
+				resp = models.CommandResponse{Success: false, Error: err.Error()}
 			} else {
-				resp = CommandResponse{Success: true, Data: result}
+				resp = models.CommandResponse{Success: true, Data: result}
 			}
 		default:
-			resp = CommandResponse{Success: false, Error: "Invalid command type"}
+			resp = models.CommandResponse{Success: false, Error: fmt.Sprintf("Invalid command type: %s", cmdReq.Type)}
 		}
 
 		w.Header().Set("Content-Type", "application/json")
