@@ -92,8 +92,7 @@ Executes a command and returns the result in JSON format.
       "data": {
           "hostname": "MyHost",
           "ip_address": "192.168.1.1"
-      },
-      "error": ""
+      }
   }
   ```
 
