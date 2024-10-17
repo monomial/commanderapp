@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"runtime"
 	"time"
 )
 
@@ -25,7 +26,21 @@ func (c *commander) Ping(host string) (models.PingResult, error) {
 	log.Printf("Executing ping for host: %s", host)
 
 	start := time.Now()
-	err := exec.Command("ping", "-c", "1", host).Run()
+
+	var cmd *exec.Cmd
+
+	// Check the operating system and construct the appropriate command
+	if runtime.GOOS == "windows" {
+		// Use -n for Windows
+		cmd = exec.Command("ping", "-n", "1", host)
+	} else {
+		// Use -c for Unix-based systems (Linux/macOS)
+		cmd = exec.Command("ping", "-c", "1", host)
+	}
+
+	// Run the ping command
+	err := cmd.Run()
+
 	if err != nil {
 		log.Printf("Ping failed for host: %s, error: %v", host, err)
 		return models.PingResult{Successful: false}, err

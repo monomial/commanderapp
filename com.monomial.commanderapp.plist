@@ -13,5 +13,10 @@
 
        <key>RunAtLoad</key>
        <true/>
+
+       <key>StandardOutPath</key>
+       <string>/tmp/commanderapp.log</string>
+       <key>StandardErrorPath</key>
+       <string>/tmp/commanderapp.err</string>
    </dict>
 </plist>
